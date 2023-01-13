@@ -2,6 +2,8 @@
 
 /** Functionality related to chatting. */
 
+const {parseCommand} = require("./commands")
+
 // Room is an abstraction of a chat channel
 const Room = require("./Room");
 
@@ -73,7 +75,14 @@ class ChatUser {
    */
 
   handleMessage(jsonData) {
+    // TODO: check text if it contains /
     let msg = JSON.parse(jsonData);
+
+    if(msg.startsWith("/")){
+      parseCommand(msg)
+    }
+
+
 
     if (msg.type === "join") this.handleJoin(msg.name);
     else if (msg.type === "chat") this.handleChat(msg.text);

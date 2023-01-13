@@ -26,6 +26,7 @@ const ChatUser = require("./ChatUser");
  */
 
 app.ws("/chat/:roomName", function (ws, req, next) {
+  console.log("ws=", ws)
   try {
     const user = new ChatUser(
         ws.send.bind(ws), // fn to call to message this user
