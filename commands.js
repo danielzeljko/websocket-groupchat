@@ -1,22 +1,45 @@
 "use strict";
 
-const VALID_COMMANDS = ["joke"]
+const axios = require("axios");
+const Room = require("./Room")
 
-function parseCommand(msg){
-  // msg = /joke
+const VALID_COMMANDS = ["joke", "members"];
 
-  const command = msg.slice(1);
+async function parseCommand({text, roomName}) {
 
-  if(VALID_COMMANDS.includes(command)){
-    // GET DAD JOKE
+  const command = text.slice(1);
+
+  // TODO: Use a switch?
+
+  console.log(roomName)
+
+  if (command === "joke") {
+    return await getDadJoke()
+  } else if (command === "members") {
+    const listOfMembers = [];
+    const members = Room.get(roomName).members;
+    members.forEach(m => listOfMembers.push(m.name))
+    console.log("members", members)
+    return listOfMembers.join(", ")
   }
 
 }
 
-async function getDadJoke(){
+async function getDadJoke() {
+  const joke = await axios
+    .get(
+      `https://icanhazdadjoke.com`,
+      {
+        headers: {
+          'User-Agent': 'Rithm School WebSocket Exercise',
+          "Accept": "application/json"
+        }
+      }
+    );
 
+  return joke.data.joke;
 }
 
 module.exports = {
   parseCommand
-}
+};

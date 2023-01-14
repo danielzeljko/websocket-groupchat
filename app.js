@@ -26,7 +26,6 @@ const ChatUser = require("./ChatUser");
  */
 
 app.ws("/chat/:roomName", function (ws, req, next) {
-  console.log("ws=", ws)
   try {
     const user = new ChatUser(
         ws.send.bind(ws), // fn to call to message this user
@@ -35,9 +34,9 @@ app.ws("/chat/:roomName", function (ws, req, next) {
 
     // register handlers for message-received, connection-closed
 
-    ws.on("message", function (data) {
+    ws.on("message", async function (data) {
       try {
-        user.handleMessage(data);
+         await user.handleMessage(data);
       } catch (err) {
         console.error(err);
       }

@@ -23,7 +23,6 @@ ws.onopen = function (evt) {
 /** called when msg received from server; displays it. */
 
 ws.onmessage = function (evt) {
-  console.log("message", evt);
 
   let msg = JSON.parse(evt.data);
   let item;
@@ -60,7 +59,16 @@ $("form").submit(function (evt) {
   evt.preventDefault();
 
   let data = { type: "chat", text: $("#m").val() };
+
+  if(checkIfMessageIsCommand(data.text)){
+    data.roomName = roomName;
+  }
+
   ws.send(JSON.stringify(data));
 
   $("#m").val("");
 });
+
+function checkIfMessageIsCommand(msg){
+  return msg.startsWith("/")
+}

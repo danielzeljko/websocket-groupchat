@@ -74,13 +74,15 @@ class ChatUser {
    * </code>
    */
 
-  handleMessage(jsonData) {
-    // TODO: check text if it contains /
+  async handleMessage(jsonData) {
     let msg = JSON.parse(jsonData);
 
-    if(msg.startsWith("/")){
-      parseCommand(msg)
+    if(msg.text !== undefined && msg.text.startsWith("/")){
+      console.log("parse command")
+      msg.text = await parseCommand(msg)
     }
+
+    console.log("Our message=", msg.text)
 
 
 
